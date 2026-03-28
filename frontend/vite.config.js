@@ -16,9 +16,10 @@ export default defineConfig({
     },
   },
   build: {
-    // Output directly to static/ so python serve.py works unchanged
-    outDir: resolve(__dirname, '../static'),
-    emptyOutDir: false,   // preserve fight_log.json
+    // On Vercel (root dir = frontend), output to dist/
+    // Locally, output to ../static/ so python serve.py works unchanged
+    outDir: process.env.VERCEL ? 'dist' : resolve(__dirname, '../static'),
+    emptyOutDir: process.env.VERCEL ? true : false,
     assetsDir: 'assets',
   },
 })
