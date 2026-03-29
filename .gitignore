@@ -21,3 +21,6 @@ static/fight_log.json
 # IDE
 .vscode/
 .idea/
+
+# Test utilities
+test_new_models.py
