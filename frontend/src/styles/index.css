@@ -80,6 +80,7 @@ header {
 .logo-mark {
   font-size: 1.1rem;
   color: var(--gold);
+  flex-shrink: 0;
 }
 
 .logo-text {
@@ -88,6 +89,7 @@ header {
   letter-spacing: 0.2em;
   color: var(--gold);
   text-shadow: 0 0 18px rgba(243, 195, 86, 0.45);
+  white-space: nowrap;
 }
 
 .scene-mode {
@@ -136,7 +138,6 @@ header {
 .arena-stack {
   position: relative;
   border-radius: 16px;
-  overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.05);
   box-shadow:
     0 24px 60px rgba(0, 0, 0, 0.35),
@@ -147,6 +148,8 @@ header {
   position: relative;
   width: 100%;
   background: #090910;
+  border-radius: 16px;
+  overflow: hidden;
 }
 
 #ring {
@@ -961,41 +964,73 @@ header {
 
 @media (max-width: 860px) {
   header {
-    grid-template-columns: 1fr;
-    justify-items: start;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .header-right {
+    margin-left: auto;
   }
 
   .fight-title {
+    width: 100%;
     text-align: left;
+    font-size: 0.95rem;
   }
 
-  #hud-top {
-    grid-template-columns: 1fr;
-  }
-
+  /* HUD stays as 3-column overlay — just shrink sizes so it fits */
   .hud-panel {
     min-width: 0;
+    padding: 6px 8px 8px;
+    gap: 4px;
   }
 
-  .hud-panel-left,
-  .hud-panel-right,
-  #hud-center {
-    border-radius: 0;
+  .hud-name {
+    font-size: 0.85rem;
+  }
+
+  .hud-track {
+    height: 7px;
+  }
+
+  .hud-val {
+    font-size: 0.6rem;
+    width: 24px;
+  }
+
+  .hud-perks {
+    display: none;
   }
 
   #hud-center {
-    order: -1;
+    min-width: 80px;
+    padding: 6px 8px 8px;
+  }
+
+  #round-number {
+    font-size: 2rem;
+  }
+
+  #round-dots {
+    display: none;
   }
 
   #hud-bottom {
-    grid-template-columns: 1fr;
-    justify-items: stretch;
+    gap: 4px;
+    padding: 0 4px;
   }
 
-  .callout-left,
-  .callout-right,
+  .callout {
+    min-width: 0;
+    padding: 5px 8px 4px;
+    font-size: 0.9rem;
+    gap: 4px;
+  }
+
   .center-telemetry {
-    justify-self: stretch;
+    padding: 5px 8px;
   }
 
   #controls {
@@ -1013,6 +1048,59 @@ header {
 
   .result-stat-line {
     grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .hud-name {
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+  }
+
+  #hud-center {
+    min-width: 60px;
+    padding: 4px 4px 6px;
+  }
+
+  #round-number {
+    font-size: 1.5rem;
+  }
+
+  #round-of,
+  #round-label {
+    display: none;
+  }
+
+  #distance-indicator {
+    font-size: 0.6rem;
+    padding: 2px 6px;
+    margin-top: 2px;
+  }
+
+  .callout {
+    font-size: 0.72rem;
+    padding: 4px 5px 3px;
+  }
+
+  .callout-icon {
+    display: none;
+  }
+
+  .arena-banner-label {
+    font-size: 1rem;
+  }
+
+  .launcher-selects {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .launcher-vs {
+    display: none;
+  }
+
+  #btn-start-fight {
+    width: 100%;
   }
 }
 

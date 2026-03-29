@@ -436,7 +436,7 @@ export default function App() {
     <div id="app" className={`scene-tone-${sceneTone}`} onClick={resumeAudio}>
       <header>
         <div className="header-left">
-          <div className="logo-mark">[]</div>
+          <div className="logo-mark">🥊</div>
           <span className="logo-text">AI BOXING</span>
           <nav className="header-nav">
             <button
