@@ -1284,3 +1284,465 @@ header {
     scroll-behavior: auto !important;
   }
 }
+
+/* ── Result overlay fighter link ── */
+.result-fighter-link {
+  background: none;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: transparent;
+  transition: text-decoration-color 0.15s;
+}
+.result-fighter-link:hover {
+  text-decoration-color: currentColor;
+}
+
+/* ── Navigation Tabs ── */
+.header-nav {
+  display: flex;
+  gap: 4px;
+  margin-left: 16px;
+}
+
+.nav-tab {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--muted);
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  letter-spacing: 0.08em;
+  padding: 4px 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.nav-tab:hover {
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.nav-tab-active {
+  color: var(--gold);
+  border-color: var(--gold-dim);
+  background: rgba(243, 195, 86, 0.08);
+}
+
+/* ── Leaderboard ── */
+.leaderboard {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.leaderboard-title {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  letter-spacing: 0.06em;
+  color: var(--gold);
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.leaderboard-loading,
+.leaderboard-empty {
+  text-align: center;
+  color: var(--muted);
+  font-size: 1rem;
+  padding: 40px 0;
+}
+
+.leaderboard-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
+.leaderboard-table thead {
+  background: var(--surface-2);
+}
+
+.lb-th {
+  padding: 12px 14px;
+  text-align: left;
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-transform: uppercase;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.lb-th.sortable {
+  cursor: pointer;
+}
+
+.lb-th.sortable:hover {
+  color: var(--text);
+}
+
+.lb-th.active {
+  color: var(--gold);
+}
+
+.sort-arrow {
+  font-size: 0.65rem;
+}
+
+.lb-row {
+  border-bottom: 1px solid var(--border);
+  transition: background 0.12s;
+}
+
+.lb-row:last-child {
+  border-bottom: none;
+}
+
+.lb-row:hover {
+  background: rgba(243, 195, 86, 0.04);
+}
+
+.lb-row-first {
+  background: rgba(243, 195, 86, 0.06);
+}
+
+.lb-row-first .lb-rank {
+  color: var(--gold);
+  text-shadow: 0 0 12px rgba(243, 195, 86, 0.4);
+}
+
+.lb-row td {
+  padding: 10px 14px;
+  white-space: nowrap;
+}
+
+.lb-rank {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  color: var(--muted);
+  width: 40px;
+  text-align: center;
+}
+
+.lb-name {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lb-name-btn {
+  background: none;
+  border: none;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+  transition: color 0.12s;
+}
+
+.lb-name-btn:hover {
+  color: var(--gold);
+}
+
+.lb-provider {
+  font-size: 0.7rem;
+  color: var(--muted);
+  font-family: var(--font-mono);
+}
+
+.lb-record {
+  font-family: var(--font-mono);
+}
+
+.lb-w { color: #4ade80; }
+.lb-l { color: var(--red); }
+.lb-d { color: var(--gold); }
+
+.lb-pct, .lb-num {
+  color: var(--text);
+}
+
+/* ── Fighter Profile ── */
+.fighter-profile {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.profile-back {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  padding: 6px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: all 0.12s;
+}
+
+.profile-back:hover {
+  color: var(--gold);
+  border-color: var(--gold-dim);
+}
+
+.profile-loading,
+.profile-error {
+  text-align: center;
+  color: var(--muted);
+  padding: 40px 0;
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.profile-name {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  letter-spacing: 0.06em;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.profile-meta {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.profile-badge {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  padding: 3px 10px;
+  border-radius: 4px;
+  letter-spacing: 0.04em;
+}
+
+.profile-badge-model {
+  color: var(--gold-dim);
+}
+
+.profile-personality {
+  color: var(--text);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  max-width: 600px;
+  margin: 0 auto 8px;
+  opacity: 0.85;
+}
+
+.profile-voice {
+  color: var(--gold);
+  font-style: italic;
+  font-size: 0.9rem;
+  opacity: 0.75;
+}
+
+/* Stats Grid */
+.profile-section {
+  margin-bottom: 24px;
+}
+
+.profile-section-title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  letter-spacing: 0.08em;
+  color: var(--gold);
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 6px;
+}
+
+.profile-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 10px;
+}
+
+.stat-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  text-align: center;
+}
+
+.stat-box-value {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  color: var(--text);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.stat-box-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Style Tags */
+.profile-style-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.style-tag {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.style-tag-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Win Methods */
+.profile-methods {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.method-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.method-label {
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  color: var(--muted);
+  width: 70px;
+  text-align: right;
+}
+
+.method-bar-track {
+  flex: 1;
+  height: 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.method-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.method-count {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text);
+  width: 30px;
+}
+
+/* Recent Fights */
+.profile-history {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.history-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
+.history-outcome {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  width: 22px;
+  text-align: center;
+}
+
+.history-outcome-win { color: #4ade80; }
+.history-outcome-loss { color: var(--red); }
+.history-outcome-draw { color: var(--gold); }
+
+.history-vs {
+  color: var(--muted);
+  font-size: 0.7rem;
+}
+
+.history-opponent {
+  background: none;
+  border: none;
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0;
+  min-width: 100px;
+  text-align: left;
+}
+
+.history-opponent:hover {
+  color: var(--gold);
+}
+
+.history-method {
+  color: var(--muted);
+  font-size: 0.75rem;
+  min-width: 65px;
+}
+
+.history-rounds {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.history-dmg {
+  color: var(--red);
+  font-size: 0.75rem;
+  margin-left: auto;
+}

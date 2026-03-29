@@ -9,6 +9,8 @@ import { FightStats } from './components/FightStats.jsx'
 import { bellRing, resumeAudio } from './lib/audio.js'
 import { FightLauncher } from './components/FightLauncher.jsx'
 import { ThoughtPanel } from './components/ThoughtPanel.jsx'
+import { Leaderboard } from './components/Leaderboard.jsx'
+import { FighterProfile } from './components/FighterProfile.jsx'
 import { apiUrl } from './lib/api.js'
 
 const BASE_SPEED = 1500
@@ -35,6 +37,9 @@ export default function App() {
   const [overlayCue, setOverlayCue] = useState(createOverlayCue('title', 'ARCADE MODE', 'gold'))
   const [reducedMotion, setReducedMotion] = useState(false)
   const [showThoughts, setShowThoughts] = useState(true)
+  const [view, setView] = useState('arena')  // 'arena' | 'leaderboard' | 'profile'
+  const [selectedFighter, setSelectedFighter] = useState(null)
+  const [fighterNames, setFighterNames] = useState({})  // id -> display_name map
 
   const playTimerRef = useRef(null)
   const impactTimerRef = useRef(null)
@@ -117,6 +122,25 @@ export default function App() {
     media.addEventListener?.('change', apply)
     return () => media.removeEventListener?.('change', apply)
   }, [])
+
+  // Load fighter name map for profiles
+  useEffect(() => {
+    fetch(apiUrl('/api/fighters'))
+      .then(r => r.json())
+      .then(data => {
+        const names = {}
+        for (const [key, val] of Object.entries(data)) {
+          names[key] = val.display_name
+        }
+        setFighterNames(names)
+      })
+      .catch(() => {})
+  }, [])
+
+  function navigateToFighter(id) {
+    setSelectedFighter(id)
+    setView('profile')
+  }
 
   useEffect(() => {
     fetch(apiUrl('/fight_log.json'))
@@ -414,31 +438,61 @@ export default function App() {
         <div className="header-left">
           <div className="logo-mark">[]</div>
           <span className="logo-text">AI BOXING</span>
-          <span className="scene-mode">{highlightMode ? 'HIGHLIGHT MODE' : 'STANDARD REPLAY'}</span>
+          <nav className="header-nav">
+            <button
+              className={`nav-tab ${view === 'arena' ? 'nav-tab-active' : ''}`}
+              onClick={() => setView('arena')}
+            >
+              ARENA
+            </button>
+            <button
+              className={`nav-tab ${view === 'leaderboard' || view === 'profile' ? 'nav-tab-active' : ''}`}
+              onClick={() => setView('leaderboard')}
+            >
+              LEADERBOARD
+            </button>
+          </nav>
         </div>
 
-        <motion.div
-          id="fight-title"
-          className="fight-title"
-          key={`${f1Name}-${f2Name}`}
-          initial={{ opacity: 0, y: -8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35 }}
-        >
-          {f1Name} VS {f2Name}
-        </motion.div>
+        {view === 'arena' && (
+          <motion.div
+            id="fight-title"
+            className="fight-title"
+            key={`${f1Name}-${f2Name}`}
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35 }}
+          >
+            {f1Name} VS {f2Name}
+          </motion.div>
+        )}
 
         <div className="header-right">
-          <button
-            className="btn-secondary"
-            onClick={() => document.getElementById('log-file-input').click()}
-          >
-            LOAD LOG
-          </button>
+          {view === 'arena' && (
+            <button
+              className="btn-secondary"
+              onClick={() => document.getElementById('log-file-input').click()}
+            >
+              LOAD LOG
+            </button>
+          )}
         </div>
       </header>
 
-      <div className="arena-row">
+      {view === 'leaderboard' && (
+        <Leaderboard onSelectFighter={navigateToFighter} />
+      )}
+
+      {view === 'profile' && selectedFighter && (
+        <FighterProfile
+          fighterId={selectedFighter}
+          onBack={() => setView('leaderboard')}
+          onSelectFighter={navigateToFighter}
+          fighterNames={fighterNames}
+        />
+      )}
+
+      {view === 'arena' && <><div className="arena-row">
         <AnimatePresence>
           {showThoughts && (
             <ThoughtPanel
@@ -540,8 +594,11 @@ export default function App() {
           result={fightLog?.result}
           meta={meta}
           onClose={() => setShowResult(false)}
+          onSelectFighter={navigateToFighter}
+          fighterNames={fighterNames}
         />
       )}
+      </>}
     </div>
   )
 }

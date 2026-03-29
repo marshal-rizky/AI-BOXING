@@ -2,11 +2,18 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { apiUrl } from '../lib/api.js'
 
-export function ResultOverlay({ result, meta, onClose }) {
+export function ResultOverlay({ result, meta, onClose, onSelectFighter, fighterNames }) {
   if (!result) return null
 
   const f1n = meta?.fighter1_config?.display_name || 'F1'
   const f2n = meta?.fighter2_config?.display_name || 'F2'
+
+  // Reverse-lookup fighter IDs from display names
+  const nameToId = fighterNames
+    ? Object.fromEntries(Object.entries(fighterNames).map(([id, name]) => [name, id]))
+    : {}
+  const f1Id = nameToId[f1n]
+  const f2Id = nameToId[f2n]
   const s1 = result.fighter1_stats || {}
   const s2 = result.fighter2_stats || {}
   const winnerColor = result.winner === f1n ? '#e84b4b' : result.winner === f2n ? '#4b9ee8' : '#e8b84b'
@@ -72,8 +79,8 @@ export function ResultOverlay({ result, meta, onClose }) {
           <div id="result-divider" />
 
           <motion.div id="result-stats" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.48 }}>
-            <StatLine name={f1n} stats={s1} color="#e84b4b" />
-            <StatLine name={f2n} stats={s2} color="#4b9ee8" />
+            <StatLine name={f1n} stats={s1} color="#e84b4b" onSelect={onSelectFighter ? () => onSelectFighter(f1Id) : null} />
+            <StatLine name={f2n} stats={s2} color="#4b9ee8" onSelect={onSelectFighter ? () => onSelectFighter(f2Id) : null} />
             {result.final_score && (
               <div className="result-score-row">
                 Score {result.final_score.fighter1} - {result.final_score.fighter2}
@@ -177,10 +184,13 @@ function InterviewCard({ name, response, color, isWinner, error }) {
   )
 }
 
-function StatLine({ name, stats, color }) {
+function StatLine({ name, stats, color, onSelect }) {
   return (
     <div className="result-stat-line">
-      <span style={{ color }}>{name}</span>
+      {onSelect
+        ? <button className="result-fighter-link" style={{ color }} onClick={onSelect}>{name}</button>
+        : <span style={{ color }}>{name}</span>
+      }
       <span>{stats.total_damage_dealt ?? '--'} dmg</span>
       <span>{stats.successful_dodges ?? 0} dodges</span>
       <span>{stats.api_errors ?? 0} API errors</span>

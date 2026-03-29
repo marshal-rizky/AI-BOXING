@@ -68,6 +68,33 @@ class BoxingHandler(SimpleHTTPRequestHandler):
                 self._json({"error": str(e)}, 500)
             return
 
+        if self.path == "/api/leaderboard":
+            try:
+                from db import get_leaderboard
+                self._json(get_leaderboard())
+            except Exception as e:
+                logger.exception("Leaderboard error")
+                self._json({"error": str(e)}, 500)
+            return
+
+        if self.path.startswith("/api/fighter/"):
+            try:
+                parts = self.path.split("/")
+                fighter_id = parts[3] if len(parts) > 3 else ""
+                if not fighter_id:
+                    self._json({"error": "Missing fighter ID"}, 400)
+                    return
+                from db import get_fighter_profile
+                profile = get_fighter_profile(fighter_id)
+                if profile:
+                    self._json(profile)
+                else:
+                    self._json({"error": "Fighter not found"}, 404)
+            except Exception as e:
+                logger.exception("Fighter profile error")
+                self._json({"error": str(e)}, 500)
+            return
+
         super().do_GET()
 
     def do_POST(self):
@@ -109,6 +136,14 @@ class BoxingHandler(SimpleHTTPRequestHandler):
             )
             log_dict = log.to_dict()
             self._save_fight_log(log_dict, log.metadata.fight_id)
+
+            # Record to Supabase (fire-and-forget)
+            try:
+                from db import record_fight
+                record_fight(log_dict)
+            except Exception as e:
+                logger.warning("Could not record fight to DB: %s", e)
+
             self._json(log_dict)
         except PermissionError as e:
             self._json({"error": str(e)}, 403)
@@ -161,6 +196,13 @@ def serve(port: int = 8080):
 
     _load_dotenv()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+
+    # Seed fighters into Supabase on startup
+    try:
+        from db import seed_fighters
+        seed_fighters(CONFIG)
+    except Exception as e:
+        logger.warning("Could not seed fighters to Supabase: %s", e)
 
     key_names = ["GROQ_API_KEY", "CEREBRAS_API_KEY", "GOOGLE_API_KEY"]
     key_names.extend(CONFIG.get("openrouter_api_key_envs", ["OPENROUTER_API_KEY"]))
